@@ -1,0 +1,15 @@
+{
+    "manifest_version": 3,
+    "name": "Page Redirector",
+    "version": "0.1",
+    "description": "Redirects from specific pages to a new destination using declarativeNetRequest.",
+    "permissions": [
+        "declarativeNetRequest"
+    ],
+    "host_permissions": [
+        "*://*/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    }
+}
