@@ -4,12 +4,21 @@
     "version": "0.1",
     "description": "Redirects from specific pages to a new destination using declarativeNetRequest.",
     "permissions": [
-        "declarativeNetRequest"
+        "declarativeNetRequest",
+        "storage"
     ],
     "host_permissions": [
         "*://*/*"
     ],
+    "action": {
+        "default_title": "Page Redirector Options",
+        "default_popup": "options_ui.html"
+    },
     "background": {
         "service_worker": "background.js"
+    },
+    "options_ui": {
+        "page": "options_ui.html",
+        "open_in_tab": true
     }
 }
