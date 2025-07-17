@@ -1,17 +1,16 @@
+const destinationUrl = "http://127.0.0.1";
 
-// Define the pages to redirect from and the destination URL.
-// You can customize these arrays.
-const pagesToRedirectFrom = [
-    "https://reddit.com"
-];
+async function init() {
 
-const destinationUrl = "http://127.0.0.1"; // The URL you want to redirect to.
+    data = await chrome.storage.sync.get("sitesToreDirect");
+    sourceUrls = data.sitesToRedirect || []
+    console.log("urls to redirect ->\n" + sourceUrls)
+    await setupRedirectRules(sourceUrls);
 
-/**
- * Sets up dynamic redirection rules using the declarativeNetRequest API.
- * This function will remove any previously set dynamic rules and then add new ones.
- */
-async function setupRedirectRules() {
+    console.log("Page Redirector extension loaded. Rules are being set up via declarativeNetRequest.");
+}
+
+async function setupRedirectRules(sourceUrls) {
     try {
         // First, get all existing dynamic rules.
         const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
@@ -25,15 +24,14 @@ async function setupRedirectRules() {
             console.log("Removed existing dynamic rules:", existingRuleIds);
         }
 
-        // Create new rules based on the 'pagesToRedirectFrom' array.
         // Each URL to redirect from will have its own rule.
-        const newRules = pagesToRedirectFrom.map((sourceUrl, index) => ({
+        const newRules = sourceUrls.map((sourceUrl, index) => ({
             id: index + 1, // Rule IDs must be unique integers and are typically positive.
             priority: 1,   // Priority of the rule. Higher priority rules are evaluated first.
             action: {
-                type: "redirect", // The action to perform: redirect the request.
+                type: "redirect",
                 redirect: {
-                    url: destinationUrl // The URL to redirect to.
+                    url: destinationUrl
                 }
             },
             condition: {
@@ -58,8 +56,11 @@ async function setupRedirectRules() {
     }
 }
 
-// Call the setup function when the service worker is initialized.
-// This ensures that the redirection rules are set up as soon as the extension loads or updates.
-setupRedirectRules();
+init();
 
-console.log("Page Redirector extension loaded. Rules are being set up via declarativeNetRequest.");
+chrome.runtime.onMessage.addListener((message, _, _) => {
+    if (message.action === "refreshRedirectRules") {
+        init();
+        console.log("Received request to refresh redirect rules.");
+    }
+});
