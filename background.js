@@ -2,7 +2,7 @@ const destinationUrl = "http://127.0.0.1";
 
 async function init() {
 
-    data = await chrome.storage.sync.get("sitesToreDirect");
+    data = await chrome.storage.sync.get("sitesToRedirect");
     sourceUrls = data.sitesToRedirect || []
     console.log("urls to redirect ->\n" + sourceUrls)
     await setupRedirectRules(sourceUrls);
@@ -58,7 +58,7 @@ async function setupRedirectRules(sourceUrls) {
 
 init();
 
-chrome.runtime.onMessage.addListener((message, _, _) => {
+chrome.runtime.onMessage.addListener((message, sender, senderResponse) => {
     if (message.action === "refreshRedirectRules") {
         init();
         console.log("Received request to refresh redirect rules.");
