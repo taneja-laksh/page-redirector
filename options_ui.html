@@ -1,0 +1,38 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Page Redirector</title>
+    <style>
+        textarea {
+            margin: 20 0;
+        }
+
+        .content {
+            padding: 20px;
+            border: 1px solid #ccc;
+            display: inline-block;
+        }
+
+        #status {
+            margin-bottom: 20px;
+            color: green;
+        }
+    </style>
+</head>
+
+<center>
+
+    <body>
+        <div class="content">
+            <label for="pagetoredirect">Add urls to be redirected (new line seperates urls)</label><br>
+            <textarea rows="10" cols="50" id="pagetoredirect"></textarea><br>
+            <div id="status"></div>
+            <button id="save">Save</button>
+            <script src="options.js"></script>
+        </div>
+
+    </body>
+</center>
+
+</html>
