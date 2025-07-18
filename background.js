@@ -1,16 +1,19 @@
-const destinationUrl = "http://127.0.0.1";
 
 async function init() {
 
     data = await chrome.storage.sync.get("sitesToRedirect");
     sourceUrls = data.sitesToRedirect || []
+
+    data = await chrome.storage.sync.get("destinationUrl");
+    destinationUrl = data.destinationUrl
+
     console.log("urls to redirect ->\n" + sourceUrls)
-    await setupRedirectRules(sourceUrls);
+    await setupRedirectRules(sourceUrls, destinationUrl);
 
     console.log("Page Redirector extension loaded. Rules are being set up via declarativeNetRequest.");
 }
 
-async function setupRedirectRules(sourceUrls) {
+async function setupRedirectRules(sourceUrls, destinationUrl) {
     try {
         // First, get all existing dynamic rules.
         const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
