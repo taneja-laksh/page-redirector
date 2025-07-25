@@ -27,6 +27,11 @@ async function setupRedirectRules(sourceUrls, destinationUrl) {
             console.log("Removed existing dynamic rules:", existingRuleIds);
         }
 
+        if ((sourceUrls[0] == "" && sourceUrls.length == 1) || sourceUrls.length == 0) {
+            console.log("No urls to redirect")
+            return
+        }
+
         // Each URL to redirect from will have its own rule.
         const newRules = sourceUrls.map((sourceUrl, index) => ({
             id: index + 1, // Rule IDs must be unique integers and are typically positive.
@@ -44,18 +49,13 @@ async function setupRedirectRules(sourceUrls, destinationUrl) {
                 ]
             }
         }));
-
         // Add the newly created dynamic rules.
-        if (newRules.length > 0) {
-            await chrome.declarativeNetRequest.updateDynamicRules({
-                addRules: newRules
-            });
-            console.log("Added new redirection rules:", newRules);
-        } else {
-            console.log("No redirection rules to add.");
-        }
+        await chrome.declarativeNetRequest.updateDynamicRules({
+            addRules: newRules
+        });
+        console.log("Added new redirection rules:", newRules)
     } catch (error) {
-        console.error("Error setting up redirect rules:", error);
+        console.error("Error setting up redirect rules:", error)
     }
 }
 
@@ -63,7 +63,7 @@ init();
 
 chrome.runtime.onMessage.addListener((message, sender, senderResponse) => {
     if (message.action === "refreshRedirectRules") {
-        init();
-        console.log("Received request to refresh redirect rules.");
+        init()
+        console.log("Received request to refresh redirect rules.")
     }
 });
