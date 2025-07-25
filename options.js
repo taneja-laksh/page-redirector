@@ -13,6 +13,10 @@ async function updatesites() {
     const sites = document.getElementById("pagetoredirect").value
     const sitesclean = sites.split("\n")
     const desturl = document.getElementById("destination").value
+    if (sites.includes(desturl)) {
+        console.log("Destination and source can't be the same")
+        return
+    }
     destinationstores = cleanDestination(desturl)
     console.log("url cleaned", desturl, " to ", destinationstores)
     chrome.storage.sync.set(
