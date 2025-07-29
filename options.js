@@ -28,11 +28,10 @@ async function updatesites() {
 
     chrome.runtime.sendMessage({ action: "refreshRedirectRules" })
 
-    const status = document.getElementById("status")
-    status.textContent = "Options saved"
-
+    const status = document.getElementById("save")
+    status.textContent = "Saved!"
     setTimeout(() => {
-        status.textContent = ''
+        status.textContent = 'Save'
     }, 750);
 }
 
